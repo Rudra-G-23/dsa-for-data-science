@@ -1,0 +1,7 @@
+---
+import { stages } from '../data/stages';
+import StageCard from './StageCard.astro';
+---
+<div class="full-stage-list" data-stage-list>
+  {stages.map((stage) => <StageCard stage={stage} />)}
+</div>

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A practical, Python-first roadmap for learning data structures and algorithms for data science and machine learning." />
+    <title>DSA for Data Science</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="DSA for Data Science home">
+          <span class="brand-mark">{ }</span>
+          <span>DSA / DS</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#roadmap">Roadmap</a>
+          <a href="#practice">Practice</a>
+          <a href="#resources">Resources</a>
+        </nav>
+        <a class="github-link" href="https://github.com/Rudra-G-23/dsa-for-data-science" target="_blank" rel="noreferrer">
+          <span>View on GitHub</span><span aria-hidden="true">↗</span>
+        </a>
+      </header>
+
+      <main id="top">
+        <section class="hero section-grid">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-dot"></span> A calmer way to learn the fundamentals</p>
+            <h1>Learn to think<br /><em>in structures.</em></h1>
+            <p class="hero-intro">A practical, Python-first path through data structures and algorithms - built for data science, machine learning, and the curious beginner.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#roadmap">Start the roadmap <span>→</span></a>
+              <button class="button button-quiet" data-open-setup>Find my starting point <span>↗</span></button>
+            </div>
+            <p class="hero-note"><span class="checkmark">✓</span> No account. No streaks. Your progress stays in your browser.</p>
+          </div>
+
+          <div class="hero-visual" aria-label="A visual showing a learning path from Python to machine learning">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="path-label label-python"><span class="node node-coral"></span> Python</div>
+            <div class="path-label label-structures"><span class="node node-blue"></span> Structures</div>
+            <div class="path-label label-algorithms"><span class="node node-yellow"></span> Algorithms</div>
+            <div class="path-label label-ml"><span class="node node-white"></span> ML thinking</div>
+            <div class="path-arrow arrow-one">↗</div>
+            <div class="path-arrow arrow-two">↘</div>
+            <div class="hero-visual-caption"><span>01</span><span>build the mental model</span></div>
+          </div>
+        </section>
+
+        <section class="stats-strip" aria-label="Roadmap facts">
+          <div><strong>18</strong><span>learning stages</span></div>
+          <div><strong>5</strong><span>passes per topic</span></div>
+          <div><strong>100%</strong><span>open source</span></div>
+          <div class="stats-message">The goal is not to memorize patterns.<br /><b>It is to recognize why they work.</b></div>
+        </section>
+
+        <section class="roadmap-section" id="roadmap">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">The guided path</p>
+              <h2>Start small.<br /><em>Go deep.</em></h2>
+            </div>
+            <p class="section-description">A dependency-safe sequence that takes you from Python foundations to the structures and patterns that show up in real data work.</p>
+          </div>
+
+          <div class="current-card">
+            <div class="current-card-top"><span class="mono-label">YOUR NEXT STEP</span><span class="stage-status">STAGE 00 / 18</span></div>
+            <div class="current-card-body">
+              <div class="stage-number">00</div>
+              <div class="stage-info"><p class="eyebrow">Python foundations</p><h3>Get comfortable with the objects underneath the code.</h3><p>Values, variables, mutability, copying, memory, and the small Python toolkit you will use in every stage after this.</p></div>
+              <a class="button button-dark" href="#practice">Open stage <span>→</span></a>
+            </div>
+            <div class="progress-track"><span style="width: 0%"></span></div>
+          </div>
+
+          <div class="stage-grid">
+            <article class="stage-card stage-card-muted"><div class="card-number">01</div><div><h3>Complexity</h3><p>Learn to measure how an idea scales.</p></div><span class="card-arrow">↗</span></article>
+            <article class="stage-card"><div class="card-number">02</div><div><h3>Arrays & lists</h3><p>See what Python lists are really doing.</p></div><span class="card-arrow">↗</span></article>
+            <article class="stage-card"><div class="card-number">03</div><div><h3>Strings & hashing</h3><p>Turn text into a problem you can reason about.</p></div><span class="card-arrow">↗</span></article>
+            <article class="stage-card stage-card-dark"><div class="card-number">04</div><div><h3>Patterns</h3><p>Two pointers, windows, and the first real leaps.</p></div><span class="card-arrow">↗</span></article>
+          </div>
+          <div class="roadmap-toolbar">
+            <div><p class="eyebrow">Complete sequence</p><h3>Choose a stage</h3></div>
+            <label class="search-field"><span>⌕</span><input data-stage-search type="search" placeholder="Search stages" /></label>
+          </div>
+          <div class="full-stage-list" data-stage-list></div>
+          <a class="text-link" href="docs/DSA_for_Data_Science_ML_Master_Roadmap.md">See the complete roadmap <span>→</span></a>
+        </section>
+
+        <section class="practice-section section-grid" id="practice">
+          <div class="practice-visual"><div class="practice-page"><span class="page-kicker">TODAY'S PRACTICE</span><h3>Trace before<br /><em>you run.</em></h3><div class="trace-lines"><span></span><span></span><span></span><span></span></div><div class="page-footer"><span>paper first</span><span>04 / 18</span></div></div><div class="floating-note">predict<br /><span>→</span> run<br /><span>→</span> explain</div></div>
+          <div class="practice-copy"><p class="eyebrow">The practice loop</p><h2>Understand it.<br /><em>Then make it yours.</em></h2><p>Every stage follows the same reliable rhythm: build the mental model, draw the state, implement the core operation, use the Pythonic version, then solve a few problems.</p><div class="loop-list"><div><span>01</span><b>Understand</b><small>what it is and why it exists</small></div><div><span>02</span><b>Trace</b><small>the state on paper before code</small></div><div><span>03</span><b>Implement</b><small>the operation yourself</small></div><div><span>04</span><b>Apply</b><small>recognize it in a new problem</small></div></div></div>
+        </section>
+
+        <section class="resources-section" id="resources">
+          <div class="section-heading resource-heading"><div><p class="eyebrow">A small, useful library</p><h2>Good resources<br /><em>at the right time.</em></h2></div><p class="section-description">No resource roulette. Each stage pairs one clear explanation with a visual, a practice set, and a way to go deeper when you are ready.</p></div>
+          <div class="resource-grid"><a class="resource-card resource-card-light" href="docs/resources-meta-data.md"><span class="resource-icon">↗</span><span class="resource-type">READ FIRST</span><h3>How to use<br />the collection</h3><span class="resource-link">Study method <b>→</b></span></a><a class="resource-card resource-card-blue" href="https://pythontutor.com/" target="_blank" rel="noreferrer"><span class="resource-icon">◌</span><span class="resource-type">VISUALIZE</span><h3>See your code<br />come alive</h3><span class="resource-link">Python Tutor <b>↗</b></span></a><a class="resource-card resource-card-coral" href="docs/DSA_Practice_System_Free_Resources_Dependency_Safe.md"><span class="resource-icon">✦</span><span class="resource-type">PRACTICE</span><h3>A dependency-safe<br />practice system</h3><span class="resource-link">Open the guide <b>→</b></span></a></div>
+        </section>
+
+        <section class="workspace-section" id="workspace">
+          <div class="section-heading"><div><p class="eyebrow">Your study workspace</p><h2>Keep the thread<br /><em>in your hands.</em></h2></div><p class="section-description">Progress is deliberately simple. Mark stages complete, export your trail, and take it with you when you switch devices.</p></div>
+          <div class="workspace-grid">
+            <div class="progress-card"><div class="workspace-card-top"><span class="mono-label">LOCAL PROGRESS</span><span data-progress-label>0 / 19 complete</span></div><div class="big-progress"><span data-progress-bar></span></div><p data-progress-copy>Nothing is checked off yet. That is a perfectly good place to begin.</p><div class="workspace-actions"><button class="small-button" data-export>Export progress</button><label class="small-button small-button-outline">Restore progress<input data-import type="file" accept="application/json" hidden /></label><button class="small-button small-button-quiet" data-reset>Reset</button></div></div>
+            <div class="practice-card"><span class="resource-type">PRACTICE COMPANION</span><h3>One chunk.<br /><em>One honest session.</em></h3><p>Use the full practice system when you want the paper trace, debugging drill, AI prompt, and completion standard for a stage.</p><a class="button button-dark" href="docs/DSA_Practice_System_Free_Resources_Dependency_Safe.md">Open practice guide <span>↗</span></a></div>
+          </div>
+        </section>
+
+        <section class="tools-section"><div class="tools-intro"><p class="eyebrow">Page tools</p><h2>Use the page<br /><em>your way.</em></h2><p>Copy a clean prompt into the AI tool you already use, download the current stage, or share a direct link with a study partner.</p></div><div class="tool-buttons"><div class="tool-row"><span><b>Ask AI</b><small>Beginner explanation with a public page link</small></span><button class="small-button" data-menu-toggle="ai-menu">Open menu</button><div class="tool-menu" id="ai-menu"><button data-ai="copy-markdown">Copy Markdown prompt</button><button data-ai="copy-text">Copy plain-text prompt</button><button data-ai="chatgpt">Open ChatGPT ↗</button><button data-ai="claude">Open Claude ↗</button><button data-ai="gemini">Open Gemini ↗</button><button data-ai="grok">Open Grok ↗</button></div></div><div class="tool-row"><span><b>Download</b><small>Keep a readable copy for offline study</small></span><button class="small-button" data-menu-toggle="download-menu">Open menu</button><div class="tool-menu" id="download-menu"><button data-download="markdown">Download Markdown</button><button data-download="text">Download plain text</button><button data-download="print">Print / save as PDF</button></div></div><div class="tool-row"><span><b>Share</b><small>Send the current public study page</small></span><button class="small-button" data-menu-toggle="share-menu">Open menu</button><div class="tool-menu" id="share-menu"><button data-share="copy">Copy link</button><button data-share="native">Share from device</button><button data-share="linkedin">Share to LinkedIn ↗</button></div></div></div></section>
+
+        <section class="closing-section"><p class="eyebrow">One idea at a time</p><h2>You do not need to<br /><em>be good at DSA yet.</em></h2><p>Just start with the next honest question.</p><a class="button button-primary" href="#roadmap">Take the next step <span>→</span></a></section>
+      </main>
+
+      <footer class="footer"><div class="brand"><span class="brand-mark">{ }</span><span>DSA / DS</span></div><span>Built in public for the long way around.</span><a href="https://github.com/Rudra-G-23/dsa-for-data-science" target="_blank" rel="noreferrer">Source repository ↗</a></footer>
+    </div>
+
+    <dialog class="setup-dialog" data-setup-dialog><button class="dialog-close" data-close-setup aria-label="Close setup">×</button><p class="eyebrow">Find your starting point</p><h2>Where are you<br /><em>right now?</em></h2><p class="dialog-copy">This is guidance, not a test. Pick the answer that feels most like you.</p><div class="setup-options"><button data-level="new">I am new to coding <span>→</span></button><button data-level="python">I know Python basics <span>→</span></button><button data-level="dsa">I can code, but DSA is new <span>→</span></button><button data-level="some">I know some DSA <span>→</span></button></div><p class="dialog-note" data-setup-note></p></dialog>
+    <dialog class="stage-dialog" data-stage-dialog><button class="dialog-close" data-close-stage aria-label="Close stage">×</button><div data-stage-detail></div></dialog>
+    <div class="toast" data-toast role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

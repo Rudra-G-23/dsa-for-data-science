@@ -1,0 +1,36 @@
+---
+const { stageId = '00', stageTitle = 'DSA for Data Science', pageUrl = '' } = Astro.props;
+---
+<div class="page-tools" data-page-tools data-stage-id={stageId} data-stage-title={stageTitle} data-page-url={pageUrl}>
+  <details class="tool-details">
+    <summary>Ask AI <span>↗</span></summary>
+    <div class="tool-menu">
+      <button data-ai="copy-markdown">Copy Markdown prompt</button>
+      <button data-ai="copy-text">Copy plain-text prompt</button>
+      <button data-ai="chatgpt">Open ChatGPT ↗</button>
+      <button data-ai="claude">Open Claude ↗</button>
+      <button data-ai="gemini">Open Gemini ↗</button>
+      <button data-ai="grok">Open Grok ↗</button>
+    </div>
+  </details>
+  <details class="tool-details">
+    <summary>Download <span>↓</span></summary>
+    <div class="tool-menu">
+      <button data-download="markdown">Download Markdown</button>
+      <button data-download="text">Download plain text</button>
+      <button data-download="print">Print / save as PDF</button>
+    </div>
+  </details>
+  <details class="tool-details">
+    <summary>Share <span>↗</span></summary>
+    <div class="tool-menu">
+      <button data-share="copy">Copy link</button>
+      <button data-share="native">Share from device</button>
+      <button data-share="linkedin">Share to LinkedIn ↗</button>
+      <button data-share="x">Share to X ↗</button>
+      <button data-share="facebook">Share to Facebook ↗</button>
+      <button data-share="reddit">Share to Reddit ↗</button>
+      <button data-share="whatsapp">Share to WhatsApp ↗</button>
+    </div>
+  </details>
+</div>

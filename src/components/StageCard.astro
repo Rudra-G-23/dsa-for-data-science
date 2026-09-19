@@ -1,0 +1,9 @@
+---
+import type { Stage } from '../data/stages';
+const { stage, compact = false } = Astro.props as { stage: Stage; compact?: boolean };
+---
+<a class:list={['stage-card', `stage-card-${stage.accent}`, compact && 'stage-card-compact']} data-stage-card data-stage-id={stage.id} data-stage-title={stage.title} data-stage-description={stage.description} data-stage-slug={stage.slug} href={`/dsa-for-data-science/stage/${stage.slug}/`}>
+  <span class="card-number">{stage.id}</span>
+  <span class="stage-card-copy"><strong>{stage.title}</strong><small>{stage.description}</small></span>
+  <span class="card-arrow">↗</span>
+</a>
