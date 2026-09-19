@@ -6,7 +6,7 @@ Restructure the DSA learning site into an Astro Docs-like documentation shell ba
 
 ## Status
 
-Interview in progress. No implementation changes made for this new structure request.
+Design tree complete. Implementation completed and verified.
 
 ## Planned sections
 
@@ -33,6 +33,10 @@ Interview in progress. No implementation changes made for this new structure req
 - Expand the active stage to reveal its local Roadmap and Practice section links.
 - Implement grouped, keyboard-accessible search results below the header search field with page, stage, and heading results.
 - Support light, dark, and system themes, defaulting to system preference and persisting explicit choices.
+- Keep the existing DSA / DS branding, colors, illustrations, and copy while adopting the docs information architecture.
+- Replace oversized non-home hero sections with compact documentation headers containing section label, title, description, and actions.
+- Mobile order: compact header, title/description, On this page accordion, main content, and full navigation in a header-menu drawer.
+- Validate desktop, tablet, and mobile widths, keyboard/focus behavior, search, theme contrast, sticky navigation, long headings, code blocks, print, and reduced motion.
 
 ## Dependencies
 
@@ -44,11 +48,7 @@ Interview in progress. No implementation changes made for this new structure req
 
 - Left navigation groups, labels, and destinations.
 - Right contents behavior and heading depth.
-- Exact page-specific navigation details.
-- Search result behavior and theme scope.
-- Responsive and visual acceptance criteria.
-- Brand treatment and content-header treatment.
-- Mobile contents ordering and accessibility details.
+None. Awaiting confirmation to begin implementation.
 
 ## Assumptions to validate
 
@@ -58,4 +58,4 @@ Interview in progress. No implementation changes made for this new structure req
 
 ## Next section and questions
 
-Section 4: Visual language, content treatment, and acceptance. Round 4: Q13-Q16.
+Implementation completed after confirmation. Production build and diff validation passed.

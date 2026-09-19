@@ -7,7 +7,6 @@ import { site } from '../../data/site';
 import { renderMarkdown } from '../../lib/renderMarkdown';
 import { stageContent } from '../../data/content';
 import Icon from '../../components/Icon.astro';
-import SequenceSidebar from '../../components/SequenceSidebar.astro';
 
 export function getStaticPaths() {
   return stages.map((stage) => ({ params: { slug: stage.slug }, props: { stage } }));
@@ -18,19 +17,13 @@ const publicUrl = `${site.basePath}/stage/${stage.slug}/`;
 const nextStage = stages[Number(stage.id) + 1];
 const previousStage = stages[Number(stage.id) - 1];
 const content = stageContent(stage.id);
-const roadmapHtml = renderMarkdown(content.roadmap, 'roadmap-', 'stage-contents');
-const practiceHtml = renderMarkdown(content.practice, 'practice-', 'stage-contents');
-const sectionLinks = [
-  { href: '#roadmap-content', title: 'Roadmap', major: true },
-  ...content.roadmapHeadings.filter((item) => item.depth >= 2).map((item) => ({ href: `#roadmap-${item.slug}`, title: item.title, major: item.depth === 2 })),
-  { href: '#practice-content', title: 'Practice', major: true },
-  ...content.practiceHeadings.filter((item) => item.depth >= 2).map((item) => ({ href: `#practice-${item.slug}`, title: item.title, major: item.depth === 2 })),
-];
+const roadmapHtml = renderMarkdown(content.roadmap, 'roadmap-', 'document-contents');
+const practiceHtml = renderMarkdown(content.practice, 'practice-', 'document-contents');
 ---
 <BaseLayout title={`${stage.title} - ${site.title}`} description={stage.description} image="/social/og-stage.svg">
   <article class="stage-page" data-stage-page data-stage-id={stage.id} data-stage-title={stage.title} data-stage-description={stage.description} data-page-url={publicUrl}>
     <header class="stage-hero"><a class="back-link" href={`${site.basePath}/#roadmap`}>← Back to roadmap</a><div class="stage-hero-meta"><SectionLabel>Stage {stage.id} / {stages.length - 1}</SectionLabel><span class:list={['priority-pill', `priority-${stage.accent}`]}>Python-first</span></div><h1>{stage.title}</h1><p class="stage-lede">{stage.description}</p><AskTools stageId={stage.id} stageTitle={stage.title} pageUrl={publicUrl} /></header>
-    <div class="stage-layout"><SequenceSidebar currentStage={stage.id} currentTitle={stage.title} sectionLinks={sectionLinks} /><main class="stage-main"><section class="stage-intro-card"><span class="mono-label">STAGE AIM</span><h2>{stage.aim}</h2><button class="complete-button" data-stage-complete data-stage-id={stage.id}><span data-complete-label>Mark stage complete</span><Icon name="check" size={17} /></button></section><section class="stage-source-block" id="roadmap-content"><div class="content-label"><SectionLabel>Roadmap content</SectionLabel><span>Source document</span></div><div class="source-content stage-source-content"><Fragment set:html={roadmapHtml} /></div></section><section class="stage-source-block" id="practice-content"><div class="content-label"><SectionLabel>Practice content</SectionLabel><span>Source document</span></div><div class="source-content stage-source-content"><Fragment set:html={practiceHtml} /></div></section></main><aside class="stage-aside"><div class="resource-stack"><span class="resource-type">STARTING LINKS</span><a data-preview-title={stage.primary.label} data-preview-description={`Recommended for ${stage.title}`} href={stage.primary.href} target="_blank" rel="noreferrer"><strong>{stage.primary.label}</strong><span>Open resource <Icon name="external" size={13} /></span></a><a data-preview-title={stage.visual.label} data-preview-description={`Visual or practice support for ${stage.title}`} href={stage.visual.href} target="_blank" rel="noreferrer"><strong>{stage.visual.label}</strong><span>Open resource <Icon name="external" size={13} /></span></a><a class="directory-link" href={`${site.basePath}/resources/`}>Full resource directory <Icon name="arrow" size={14} /></a></div></aside></div>
+    <div class="stage-layout"><main class="stage-main"><section class="stage-intro-card"><span class="mono-label">STAGE AIM</span><h2>{stage.aim}</h2><button class="complete-button" data-stage-complete data-stage-id={stage.id}><span data-complete-label>Mark stage complete</span><Icon name="check" size={17} /></button></section><section class="stage-source-block" id="roadmap-content"><div class="content-label"><SectionLabel>Roadmap content</SectionLabel><span>Source document</span></div><div class="source-content stage-source-content"><Fragment set:html={roadmapHtml} /></div></section><section class="stage-source-block" id="practice-content"><div class="content-label"><SectionLabel>Practice content</SectionLabel><span>Source document</span></div><div class="source-content stage-source-content"><Fragment set:html={practiceHtml} /></div></section></main><aside class="stage-aside"><div class="resource-stack"><span class="resource-type">STARTING LINKS</span><a data-preview-title={stage.primary.label} data-preview-description={`Recommended for ${stage.title}`} href={stage.primary.href} target="_blank" rel="noreferrer"><strong>{stage.primary.label}</strong><span>Open resource <Icon name="external" size={13} /></span></a><a data-preview-title={stage.visual.label} data-preview-description={`Visual or practice support for ${stage.title}`} href={stage.visual.href} target="_blank" rel="noreferrer"><strong>{stage.visual.label}</strong><span>Open resource <Icon name="external" size={13} /></span></a><a class="directory-link" href={`${site.basePath}/resources/`}>Full resource directory <Icon name="arrow" size={14} /></a></div></aside></div>
     <nav class="stage-pagination" aria-label="Stage navigation">{previousStage ? <a href={`${site.basePath}/stage/${previousStage.slug}/`}>← {previousStage.title}</a> : <span></span>}{nextStage ? <a href={`${site.basePath}/stage/${nextStage.slug}/`}>{nextStage.title} →</a> : <a href={`${site.basePath}/#workspace`}>Finish the path →</a>}</nav>
   </article>
 </BaseLayout>

@@ -1,0 +1,16 @@
+---
+import { referencePages, site } from '../data/site';
+import { stageGroups, stages } from '../data/stages';
+import Icon from './Icon.astro';
+
+const { currentPath } = Astro.props as { currentPath: string };
+const stageById = new Map(stages.map((stage) => [stage.id, stage]));
+const isReferenceActive = (href: string) => currentPath === href || currentPath.startsWith(`${href}/`);
+---
+<aside class="docs-sidebar" aria-label="Documentation navigation" data-docs-sidebar>
+  <div class="docs-sidebar-heading"><Icon name="book" size={17} /><strong>Learning path</strong></div>
+  <nav class="docs-sidebar-nav">
+    {stageGroups.map((group) => <section class="docs-nav-group"><span>{group.title}</span>{group.stageIds.map((id) => { const stage = stageById.get(id); const href = `/stage/${stage?.slug}/`; const active = currentPath === href; return stage && <div class:list={['docs-stage-item', active && 'is-active']}><a href={`${site.basePath}${href}`} aria-current={active ? 'page' : undefined}><small>{stage.id}</small>{stage.title}</a>{active && <div class="docs-stage-sections" data-docs-current-sections></div>}</div>; })}</section>)}
+    <section class="docs-nav-group docs-reference-group"><span>Reference</span>{referencePages.map((page) => <a class:list={['docs-reference-link', isReferenceActive(page.href) && 'is-active']} href={`${site.basePath}${page.href}`} aria-current={isReferenceActive(page.href) ? 'page' : undefined}>{page.label}</a>)}</section>
+  </nav>
+</aside>

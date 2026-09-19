@@ -302,15 +302,136 @@ document.querySelectorAll<HTMLButtonElement>('[data-copy-heading]').forEach((but
   if (heading) await copyFromButton(button, copyPromptSection(heading));
 }));
 
-const headingTargets = Array.from(document.querySelectorAll<HTMLElement>('.source-content h2[id], .source-content h3[id]'));
-const headingLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.document-toc a, .sequence-sections a[href^="#"]'));
-if (headingTargets.length && headingLinks.length && 'IntersectionObserver' in window) {
-  const headingObserver = new IntersectionObserver((entries) => {
-    const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-    if (!visible) return;
-    headingLinks.forEach((link) => link.classList.toggle('is-active', link.hash === `#${(visible.target as HTMLElement).id}`));
-  }, { rootMargin: '-110px 0px -65% 0px', threshold: 0 });
-  headingTargets.forEach((heading) => headingObserver.observe(heading));
+const docsMain = document.querySelector<HTMLElement>('.docs-main');
+const toSlug = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'section';
+const uniqueHeadingId = (heading: HTMLElement, seen: Map<string, number>) => {
+  if (heading.id) return heading.id;
+  const base = toSlug(heading.textContent || 'section');
+  const count = seen.get(base) || 0;
+  seen.set(base, count + 1);
+  heading.id = count ? `${base}-${count + 1}` : base;
+  return heading.id;
+};
+
+if (docsMain) {
+  const seenHeadings = new Map<string, number>();
+  const headings = Array.from(docsMain.querySelectorAll<HTMLElement>('h2, .source-content h3')).filter((heading) => !heading.closest('.docs-toc'));
+  const tocItems = headings.map((heading) => ({
+    id: uniqueHeadingId(heading, seenHeadings),
+    label: heading.querySelector('.heading-title')?.textContent?.trim() || heading.textContent?.replace('Copy prompt', '').replace('↑', '').trim() || 'Section',
+    depth: Number(heading.tagName.slice(1)),
+  }));
+  document.querySelectorAll<HTMLElement>('[data-docs-toc]').forEach((container) => {
+    if (!tocItems.length) { container.closest<HTMLElement>('.docs-toc')?.setAttribute('hidden', ''); return; }
+    const fragment = document.createDocumentFragment();
+    tocItems.forEach((item) => {
+      const link = document.createElement('a');
+      link.href = `#${item.id}`;
+      link.textContent = item.label;
+      if (item.depth === 3) link.classList.add('is-subsection');
+      fragment.append(link);
+    });
+    container.replaceChildren(fragment);
+  });
+
+  const stageSections = document.querySelector<HTMLElement>('[data-docs-current-sections]');
+  if (stageSections) {
+    tocItems.forEach((item) => {
+      const link = document.createElement('a');
+      link.href = `#${item.id}`;
+      link.textContent = item.label;
+      if (item.depth === 3) link.classList.add('is-subsection');
+      stageSections.append(link);
+    });
+  }
+
+  const searchInput = document.querySelector<HTMLInputElement>('[data-docs-search]');
+  const searchResults = document.querySelector<HTMLElement>('[data-docs-search-results]');
+  const staticSearchItems = (() => {
+    try { return JSON.parse(document.body.dataset.docsSearchIndex || '[]') as { label: string; href: string; type: string }[]; }
+    catch { return []; }
+  })();
+  const searchItems = [
+    ...staticSearchItems,
+    ...Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-docs-sidebar] a')).map((link) => ({ label: link.textContent?.replace(/^\d+/, '').trim() || 'Page', href: link.href, type: link.closest('.docs-reference-group') ? 'Reference' : 'Stage' })),
+    ...tocItems.map((item) => ({ label: item.label, href: `#${item.id}`, type: 'On this page' })),
+  ].filter((item, index, items) => items.findIndex((candidate) => candidate.href === item.href && candidate.label === item.label) === index);
+  let activeResult = -1;
+  const closeSearch = () => { if (searchResults) { searchResults.hidden = true; searchResults.replaceChildren(); } activeResult = -1; };
+  const renderSearch = (query: string) => {
+    if (!searchResults) return;
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) { closeSearch(); return; }
+    const results = searchItems.filter((item) => item.label.toLowerCase().includes(normalized)).slice(0, 10);
+    const fragment = document.createDocumentFragment();
+    if (!results.length) {
+      const empty = document.createElement('p');
+      empty.textContent = 'No matching pages or sections.';
+      fragment.append(empty);
+    } else {
+      results.forEach((item, index) => {
+        const link = document.createElement('a');
+        link.href = item.href;
+        link.dataset.searchResult = String(index);
+        link.innerHTML = `<small>${item.type}</small>${item.label}`;
+        fragment.append(link);
+      });
+    }
+    searchResults.replaceChildren(fragment);
+    searchResults.hidden = false;
+    activeResult = -1;
+  };
+  searchInput?.addEventListener('input', () => renderSearch(searchInput.value));
+  searchInput?.addEventListener('keydown', (event) => {
+    const results = Array.from(searchResults?.querySelectorAll<HTMLAnchorElement>('[data-search-result]') || []);
+    if (event.key === 'Escape') { closeSearch(); searchInput.blur(); return; }
+    if (!results.length) return;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      activeResult = event.key === 'ArrowDown' ? Math.min(activeResult + 1, results.length - 1) : Math.max(activeResult - 1, 0);
+      results.forEach((result, index) => result.classList.toggle('is-active', index === activeResult));
+      results[activeResult]?.focus();
+    }
+    if (event.key === 'Enter' && activeResult >= 0) results[activeResult]?.click();
+  });
+  document.addEventListener('keydown', (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); searchInput?.focus(); }
+  });
+  document.addEventListener('click', (event) => { if (!searchResults?.parentElement?.contains(event.target as Node)) closeSearch(); });
+
+  const menuButton = document.querySelector<HTMLButtonElement>('[data-docs-menu]');
+  const sidebar = document.querySelector<HTMLElement>('[data-docs-sidebar]');
+  menuButton?.addEventListener('click', () => {
+    const open = sidebar?.classList.toggle('is-open') || false;
+    menuButton.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('docs-menu-open', open);
+  });
+  sidebar?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) { sidebar.classList.remove('is-open'); menuButton?.setAttribute('aria-expanded', 'false'); document.body.classList.remove('docs-menu-open'); }
+  });
+
+  const themeKey = 'dsa-theme';
+  const applyTheme = (theme: string) => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme === 'system' ? 'light dark' : theme;
+  };
+  applyTheme(localStorage.getItem(themeKey) || 'system');
+  document.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach((button) => button.addEventListener('click', () => {
+    const theme = button.dataset.theme || 'system';
+    localStorage.setItem(themeKey, theme);
+    applyTheme(theme);
+    button.closest('details')?.removeAttribute('open');
+  }));
+
+  const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-docs-toc] a'));
+  if (headings.length && tocLinks.length && 'IntersectionObserver' in window) {
+    const headingObserver = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (!visible) return;
+      tocLinks.forEach((link) => link.classList.toggle('is-active', link.hash === `#${(visible.target as HTMLElement).id}`));
+    }, { rootMargin: '-110px 0px -65% 0px', threshold: 0 });
+    headings.forEach((heading) => headingObserver.observe(heading));
+  }
 }
 
 renderProgress();
