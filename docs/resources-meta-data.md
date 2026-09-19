@@ -108,3 +108,81 @@ When this prompt is updated here, every `Ask AI` action in the website should us
 ## Keeping the collection useful
 
 When editing the resource collection, update the relevant source document first. Keep each resource's purpose, recommended stage, dependency warning, and free-access note clear. Prefer replacing a stale link with the official current page over adding more sources.
+
+
+# Website Product Decisions - Grill Me Checkpoint
+
+Goal: settle the remaining product-design decisions for the GitHub Pages learning website.
+
+Tags: website, product, GitHub Pages, learning experience
+
+Status: complete
+
+## Decision map
+
+1. Information architecture
+2. Progress portability
+3. Sharing and social previews
+4. Reusable study skills
+5. Visual system
+6. Frontend and deployment architecture
+
+## Settled decisions
+
+- The site is a beginner-friendly, Python-first, static GitHub Pages learning-navigation site with no backend or accounts.
+- The guided path is primary, the complete roadmap remains available, and roadmap and practice-companion content remain faithful to source documents.
+- Progress is browser-local, automatic, and supports export and restore.
+- AI actions use the shared prompt, selected provider destinations, and transparent fallbacks; stage-specific prompts remain available.
+
+## Unresolved questions
+
+- None.
+
+## Assumptions awaiting confirmation
+
+- Existing repository content has no established frontend stack.
+- The public GitHub Pages domain and final social-preview image strategy are not yet specified.
+
+## Resume point
+
+All sections complete. No next question.
+
+## Completed sections
+
+### 1. Information architecture
+
+- Each stage page is the canonical learner workspace: overview, ordered topics, primary resource, practice action, and completion.
+- Reference pages contain reusable cross-stage material: resource directory, Prompt Library, glossary, and original documents.
+- Rationale: gives beginners one clear place to continue while keeping reference material easy to find without duplicating it.
+
+### 2. Progress portability - high-level choice
+
+- Use a versioned, human-readable JSON export.
+- Restore supports both Merge and Replace after confirmation.
+
+### 3. Sharing and social previews - high-level choice
+
+- Include Copy link, native sharing where supported, LinkedIn, X, Facebook, Reddit, and WhatsApp.
+- Use static Open Graph previews per page type.
+
+### 4. Reusable study skills - high-level choice
+
+- Define skills as versioned Markdown instruction packages that can be copied or linked into an AI tool's skills directory and invoked by documented slash-command-style names.
+
+### 5. Visual system - high-level choice
+
+- Use a warm editorial learning aesthetic, legible sans-serif body text, a distinct display heading font, and automatic light/dark mode with a manual toggle.
+
+### 6. Frontend and deployment architecture - high-level choice
+
+- Use Astro with static output.
+- Deploy `dist` to GitHub Pages through GitHub Actions on pushes to `main`.
+
+## Final implementation details
+
+- Progress export fields: `schemaVersion`, `exportedAt`, `selectedLevel`, `currentStage`, `completedStages`, and `lastUpdatedAt`.
+- Restore ignores unknown future fields; Merge preserves existing completion unless imported state is newer; Replace overwrites after confirmation.
+- Shared pages expose canonical URL, title, description, and static page-type preview metadata for Open Graph and Twitter-compatible consumers.
+- Each skill folder contains `SKILL.md` and may contain `references/`, `scripts/`, and `assets/`; its manifest section defines name, purpose, prerequisites, and invocation name.
+- Visual defaults: warm off-white and charcoal base, one restrained accent, system sans-serif body, readable serif display face, WCAG AA contrast, and system/light/dark selection.
+- Deployment runs on pushes to `main` and manual dispatch, uses a locked Node version and dependency lockfile, verifies static output, and deploys with official Pages artifact/deployment actions.

@@ -1,0 +1,16 @@
+{
+  "name": "dsa-for-data-science",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^7.3.3",
+    "marked": "16.3.0"
+  }
+}

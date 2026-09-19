@@ -1,0 +1,56 @@
+---
+import { site, sharedPrompt } from '../data/site';
+import '../styles/global.css';
+const { title = site.title, description = site.description, image = '/social/og-reference.svg' } = Astro.props;
+const canonical = new URL(`${site.basePath}${Astro.url.pathname}`.replace(/\/+/g, '/'), 'https://rudra-g-23.github.io').toString();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f4f1eb" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`https://rudra-g-23.github.io${site.basePath}${image}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`https://rudra-g-23.github.io${site.basePath}${image}`} />
+    <link rel="icon" href={`${site.basePath}/favicon.svg`} />
+    <title>{title}</title>
+    <script is:inline>
+      const storedTheme = localStorage.getItem('dsa-theme');
+      if (storedTheme) document.documentElement.dataset.theme = storedTheme;
+    </script>
+    <slot name="head" />
+  </head>
+  <body data-shared-prompt={sharedPrompt}>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href={`${site.basePath}/`} aria-label="DSA for Data Science home"><span class="brand-mark">{ }</span><span>{site.name}</span></a>
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href={`${site.basePath}/#roadmap`}>Roadmap</a>
+          <a href={`${site.basePath}/practice/`}>Practice</a>
+          <a href={`${site.basePath}/resources/`}>Resources</a>
+        </nav>
+        <div class="header-actions">
+          <button class="icon-button" data-theme-toggle aria-label="Use dark mode" title="Toggle dark mode">◐</button>
+          <a class="github-link" href={site.repository} target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        </div>
+      </header>
+      <main id="main-content"><slot /></main>
+      <footer class="footer">
+        <a class="brand" href={`${site.basePath}/`}><span class="brand-mark">{ }</span><span>{site.name}</span></a>
+        <span>Open source. No backend. Your progress stays local.</span>
+        <a href={site.repository} target="_blank" rel="noreferrer">Source repository ↗</a>
+      </footer>
+    </div>
+    <script src="../scripts/site.ts"></script>
+  </body>
+</html>

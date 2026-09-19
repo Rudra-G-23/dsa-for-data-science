@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AskTools from '../components/AskTools.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import { renderMarkdown } from '../lib/renderMarkdown';
+import roadmapSource from '../../docs/DSA_for_Data_Science_ML_Master_Roadmap.md?raw';
+import { site } from '../data/site';
+import { stages } from '../data/stages';
+const html = renderMarkdown(roadmapSource);
+---
+<BaseLayout title={`Complete roadmap - ${site.title}`} description="The complete source roadmap for DSA in data science and machine learning." image="/social/og-reference.svg">
+  <section class="reference-hero"><a class="back-link" href={`${site.basePath}/`}>← Back home</a><SectionLabel>The complete sequence</SectionLabel><h1>Roadmap, in full.</h1><p>Use the guided stages when you want to move. Use this page when you want the whole map in view.</p><AskTools stageTitle="Complete DSA roadmap" /></section>
+  <section class="reference-index"><div><SectionLabel>Quick index</SectionLabel><h2>19 stages<br /><em>from first principles.</em></h2></div><div class="index-grid">{stages.map((stage) => <a href={`${site.basePath}/stage/${stage.slug}/`}><span>{stage.id}</span><strong>{stage.title}</strong><small>{stage.description}</small></a>)}</div></section>
+  <article class="source-content"><div class="source-content-head"><SectionLabel>Original document</SectionLabel><p>Rendered from <a href={`${site.repository}/blob/main/docs/DSA_for_Data_Science_ML_Master_Roadmap.md`} target="_blank" rel="noreferrer">docs/DSA_for_Data_Science_ML_Master_Roadmap.md ↗</a></p></div><Fragment set:html={html} /></article>
+</BaseLayout>

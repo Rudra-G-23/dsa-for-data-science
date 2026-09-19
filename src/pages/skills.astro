@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AskTools from '../components/AskTools.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import { site } from '../data/site';
+const skills = [
+  ['dsa-explain', 'Explain one topic', 'A beginner-first explanation with an example, invariant, complexity, edge case, and two questions.'],
+  ['dsa-trace', 'Trace before code', 'A paper-first state trace that reveals one transition at a time.'],
+  ['dsa-coach', 'Coach one hint at a time', 'A problem-solving coach that protects the learner’s chance to think.'],
+];
+---
+<BaseLayout title={`Study skills - ${site.title}`} description="Reusable Markdown instruction packages for AI-assisted DSA study." image="/social/og-reference.svg">
+  <section class="reference-hero"><a class="back-link" href={`${site.basePath}/`}>← Back home</a><SectionLabel>Reusable instructions</SectionLabel><h1>Make AI a better<br /><em>study partner.</em></h1><p>These small, versioned Markdown packages give your preferred AI tool a clear role: explain, trace, or coach.</p><AskTools stageTitle="Reusable DSA study skills" /></section>
+  <section class="skill-grid">{skills.map(([name, title, description]) => <article class="skill-card"><span class="card-number">SKILL</span><h2>{title}</h2><p>{description}</p><code>/{name}</code><a class="text-link" href={`${site.repository}/tree/main/skills/${name}`} target="_blank" rel="noreferrer">Open package on GitHub <span>↗</span></a></article>)}</section>
+  <section class="source-link-panel"><SectionLabel>How to use them</SectionLabel><h2>Copy or link a skill folder into the skills directory supported by your AI tool.</h2><p class="section-description">The repository README records the package layout and invocation names. Each package includes a version and a short response contract.</p><a class="text-link" href={`${site.repository}/blob/main/skills/README.md`} target="_blank" rel="noreferrer">Read the skills README <span>↗</span></a></section>
+</BaseLayout>

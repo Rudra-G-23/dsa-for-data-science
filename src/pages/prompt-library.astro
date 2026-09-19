@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AskTools from '../components/AskTools.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import { site, sharedPrompt } from '../data/site';
+
+const prompts = [
+  ['Dependency-safe exercise generator', 'Create a small problem using only the concepts I have already studied. Ask me to state the invariant and complexity before offering hints.'],
+  ['Paper-tracing generator', 'Give me a tiny input and ask me to draw the state after each operation. Do not show the final code until I have predicted the next state.'],
+  ['One-hint-at-a-time coach', 'Act as a coach. Ask one guiding question at a time, preserve my opportunity to solve the problem, and reveal no full solution unless I explicitly request it.'],
+  ['Feynman explanation', 'Ask me to explain the idea in 60 seconds, then identify one missing invariant, one unclear term, and one useful counterexample.'],
+  ['Implementation-from-spec', 'Give me a precise behavior and edge-case specification. Let me implement it in Python, then review correctness and complexity without rewriting it for me.'],
+  ['Weekly mixed review', 'Build a short review using only completed stages. Mix recognition, tracing, implementation, complexity, and one transfer question.'],
+];
+---
+<BaseLayout title={`Prompt Library - ${site.title}`} description="Reusable AI prompts for learning DSA without outsourcing the thinking." image="/social/og-reference.svg">
+  <section class="reference-hero"><a class="back-link" href={`${site.basePath}/`}>← Back home</a><SectionLabel>Use AI well</SectionLabel><h1>Prompts that keep<br /><em>the thinking yours.</em></h1><p>Copy a prompt, add the public stage link when useful, and keep the AI in a coaching role.</p><AskTools stageTitle="DSA Prompt Library" /></section>
+  <section class="shared-prompt-card"><div><SectionLabel>Shared website prompt</SectionLabel><h2>Explain the current page<br /><em>for a beginner.</em></h2><p>This is the prompt used by every Ask AI action across the site.</p></div><pre data-shared-prompt>{sharedPrompt}</pre><button class="button button-dark" data-copy-shared>Copy shared prompt <span>↗</span></button></section>
+  <section class="prompt-grid">{prompts.map(([title, prompt]) => <article class="prompt-card"><span class="card-number">PROMPT</span><h3>{title}</h3><p>{prompt}</p><button class="small-button small-button-outline" data-copy-prompt={prompt}>Copy prompt</button></article>)}</section>
+  <section class="source-link-panel"><SectionLabel>More prompts</SectionLabel><h2>The full practice companion keeps the detailed stage prompts.</h2><a class="text-link" href={`${site.basePath}/practice/`}>Open the complete practice system <span>→</span></a><a class="text-link" href={`${site.basePath}/skills/`}>Browse reusable study skills <span>→</span></a></section>
+</BaseLayout>

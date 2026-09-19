@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AskTools from '../components/AskTools.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import { site } from '../data/site';
+const terms = [
+  ['Invariant', 'A statement that remains true after every operation in an algorithm.'],
+  ['Time complexity', 'How the amount of work grows as the input grows.'],
+  ['Space complexity', 'How extra memory use grows as the input grows.'],
+  ['Hash table', 'A structure that maps keys to values using a hash function for fast average lookup.'],
+  ['Sliding window', 'A moving range over a sequence used to maintain information about a contiguous region.'],
+  ['Recursion', 'A function solving a problem by calling itself on a smaller version of that problem.'],
+  ['Backtracking', 'Systematic search that makes a choice, explores it, then undoes the choice.'],
+  ['Heap', 'A partially ordered structure that keeps a minimum or maximum item easy to access.'],
+  ['Graph', 'A set of nodes and edges used to model relationships or movement.'],
+  ['Greedy choice', 'A local choice that is safe because it can be shown to lead to an optimal solution.'],
+  ['Dynamic programming', 'Solving overlapping subproblems once and reusing their results.'],
+  ['Top-K', 'Keeping or finding the K most important items without fully ordering everything.'],
+];
+---
+<BaseLayout title={`Glossary - ${site.title}`} description="A compact glossary of the data structure and algorithm terms in the learning path." image="/social/og-reference.svg">
+  <section class="reference-hero"><a class="back-link" href={`${site.basePath}/`}>← Back home</a><SectionLabel>Keep nearby</SectionLabel><h1>The words you will<br /><em>keep meeting.</em></h1><p>A compact reference. If a term feels abstract, return to the stage page and trace a concrete example.</p><AskTools stageTitle="DSA Glossary" /></section>
+  <section class="glossary-grid">{terms.map(([term, definition]) => <article><span class="card-number">TERM</span><h2>{term}</h2><p>{definition}</p></article>)}</section>
+</BaseLayout>
