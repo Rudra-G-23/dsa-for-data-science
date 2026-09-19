@@ -119,7 +119,13 @@ const copyText = async (value: string) => {
   }
 };
 
-const showCopied = (button: HTMLButtonElement, message = 'Copied.') => {
+const showCopied = (button: HTMLElement, message = 'Copied.') => {
+  if (button.matches('[data-copy-heading-url]')) {
+    button.classList.add('is-copied');
+    toast(message);
+    window.setTimeout(() => button.classList.remove('is-copied'), 700);
+    return;
+  }
   const original = button.dataset.originalLabel || button.innerHTML || 'Copy prompt';
   button.dataset.originalLabel = original;
   button.textContent = 'Copied';
@@ -131,7 +137,7 @@ const showCopied = (button: HTMLButtonElement, message = 'Copied.') => {
   }, 2000);
 };
 
-const copyFromButton = async (button: HTMLButtonElement, value: string, message = 'Prompt copied.') => {
+const copyFromButton = async (button: HTMLElement, value: string, message = 'Prompt copied.') => {
   if (await copyText(value)) showCopied(button, message);
   else toast('Copy failed - select and copy manually.');
 };
@@ -410,6 +416,19 @@ if (docsMain) {
     if ((event.target as HTMLElement).closest('a')) { sidebar.classList.remove('is-open'); menuButton?.setAttribute('aria-expanded', 'false'); document.body.classList.remove('docs-menu-open'); }
   });
 
+  const collapseButton = document.querySelector<HTMLButtonElement>('[data-docs-collapse]');
+  const collapseKey = 'dsa-docs-sidebar-collapsed';
+  const setSidebarCollapsed = (collapsed: boolean) => {
+    document.querySelector('.is-docs-shell')?.classList.toggle('docs-sidebar-collapsed', collapsed);
+    collapseButton?.setAttribute('aria-expanded', String(!collapsed));
+    if (collapseButton) collapseButton.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    localStorage.setItem(collapseKey, String(collapsed));
+  };
+  if (collapseButton) {
+    setSidebarCollapsed(localStorage.getItem(collapseKey) === 'true');
+    collapseButton.addEventListener('click', () => setSidebarCollapsed(!document.querySelector('.is-docs-shell')?.classList.contains('docs-sidebar-collapsed')));
+  }
+
   const themeKey = 'dsa-theme';
   const applyTheme = (theme: string) => {
     document.documentElement.dataset.theme = theme;
@@ -424,14 +443,41 @@ if (docsMain) {
   }));
 
   const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-docs-toc] a'));
-  if (headings.length && tocLinks.length && 'IntersectionObserver' in window) {
+  const sidebarSectionLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-docs-current-sections] a'));
+  const activeSectionLinks = [...tocLinks, ...sidebarSectionLinks];
+  if (headings.length && activeSectionLinks.length && 'IntersectionObserver' in window) {
     const headingObserver = new IntersectionObserver((entries) => {
       const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
       if (!visible) return;
-      tocLinks.forEach((link) => link.classList.toggle('is-active', link.hash === `#${(visible.target as HTMLElement).id}`));
+      const targetHash = `#${(visible.target as HTMLElement).id}`;
+      activeSectionLinks.forEach((link) => link.classList.toggle('is-active', link.hash === targetHash));
+      sidebarSectionLinks.find((link) => link.hash === targetHash)?.scrollIntoView({ block: 'nearest' });
     }, { rootMargin: '-110px 0px -65% 0px', threshold: 0 });
     headings.forEach((heading) => headingObserver.observe(heading));
   }
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-copy-heading-url]').forEach((link) => link.addEventListener('click', async (event) => {
+    event.preventDefault();
+    await copyFromButton(link, new URL(link.hash, window.location.href).toString(), 'Section link copied.');
+  }));
+
+  document.querySelectorAll<HTMLAnchorElement>('.heading-back').forEach((link) => link.addEventListener('click', (event) => {
+    event.preventDefault();
+    const toc = document.querySelector<HTMLElement>('.docs-toc');
+    const mobileToc = document.querySelector<HTMLDetailsElement>('.docs-mobile-toc');
+    const heading = link.closest<HTMLElement>('h2, h3');
+    const targetId = heading?.id;
+    const targetLink = targetId ? document.querySelector<HTMLAnchorElement>(`[data-docs-toc] a[href="#${CSS.escape(targetId)}"]`) : null;
+    if (window.innerWidth < 801) {
+      if (mobileToc) mobileToc.open = true;
+      toc?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.setTimeout(() => targetLink?.focus(), 180);
+    } else if (targetLink) {
+      targetLink.focus({ preventScroll: true });
+      targetLink.classList.add('is-jumped');
+      window.setTimeout(() => targetLink.classList.remove('is-jumped'), 900);
+    }
+  }));
 }
 
 renderProgress();
