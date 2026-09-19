@@ -1,10 +1,12 @@
 ---
 const { stageId = '00', stageTitle = 'DSA for Data Science', pageUrl = '' } = Astro.props;
+import Icon from './Icon.astro';
 ---
 <div class="page-tools" data-page-tools data-stage-id={stageId} data-stage-title={stageTitle} data-page-url={pageUrl}>
   <details class="tool-details">
-    <summary>Ask AI <span>↗</span></summary>
+    <summary><Icon name="spark" size={16} /> Ask AI <Icon name="arrow" size={14} /></summary>
     <div class="tool-menu">
+      <button data-ai="copy-prompt">Copy prompt</button>
       <button data-ai="copy-markdown">Copy Markdown prompt</button>
       <button data-ai="copy-text">Copy plain-text prompt</button>
       <button data-ai="chatgpt">Open ChatGPT ↗</button>
@@ -14,7 +16,7 @@ const { stageId = '00', stageTitle = 'DSA for Data Science', pageUrl = '' } = As
     </div>
   </details>
   <details class="tool-details">
-    <summary>Download <span>↓</span></summary>
+    <summary><Icon name="download" size={16} /> Download <Icon name="arrow" size={14} /></summary>
     <div class="tool-menu">
       <button data-download="markdown">Download Markdown</button>
       <button data-download="text">Download plain text</button>
@@ -22,7 +24,7 @@ const { stageId = '00', stageTitle = 'DSA for Data Science', pageUrl = '' } = As
     </div>
   </details>
   <details class="tool-details">
-    <summary>Share <span>↗</span></summary>
+    <summary><Icon name="share" size={16} /> Share <Icon name="arrow" size={14} /></summary>
     <div class="tool-menu">
       <button data-share="copy">Copy link</button>
       <button data-share="native">Share from device</button>

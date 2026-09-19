@@ -171,7 +171,7 @@ All sections complete. No next question.
 
 ### 5. Visual system - high-level choice
 
-- Use a warm editorial learning aesthetic, legible sans-serif body text, a distinct display heading font, and automatic light/dark mode with a manual toggle.
+- Use a clear light editorial learning aesthetic, legible sans-serif body text, a distinct display heading font, and restrained purple accents.
 
 ### 6. Frontend and deployment architecture - high-level choice
 
@@ -184,5 +184,5 @@ All sections complete. No next question.
 - Restore ignores unknown future fields; Merge preserves existing completion unless imported state is newer; Replace overwrites after confirmation.
 - Shared pages expose canonical URL, title, description, and static page-type preview metadata for Open Graph and Twitter-compatible consumers.
 - Each skill folder contains `SKILL.md` and may contain `references/`, `scripts/`, and `assets/`; its manifest section defines name, purpose, prerequisites, and invocation name.
-- Visual defaults: warm off-white and charcoal base, one restrained accent, system sans-serif body, readable serif display face, WCAG AA contrast, and system/light/dark selection.
+- Visual defaults: white and charcoal base, restrained purple accent, system sans-serif body, readable serif display face, and WCAG AA contrast.
 - Deployment runs on pushes to `main` and manual dispatch, uses a locked Node version and dependency lockfile, verifies static output, and deploys with official Pages artifact/deployment actions.

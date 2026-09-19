@@ -1,5 +1,6 @@
 ---
 import { stages } from '../data/stages';
+import Icon from './Icon.astro';
 ---
 <section class="workspace-section" id="workspace">
   <div class="section-heading"><div><p class="eyebrow">Your study workspace</p><h2>Keep the thread<br /><em>in your hands.</em></h2></div><p class="section-description">Progress is deliberately simple. Mark stages complete, export your trail, and take it with you when you switch devices.</p></div>
@@ -15,6 +16,6 @@ import { stages } from '../data/stages';
       </div>
       <p class="privacy-note">Export is a readable JSON file. Restore offers Merge or Replace after confirmation.</p>
     </div>
-    <div class="practice-card"><span class="resource-type">PRACTICE COMPANION</span><h3>One chunk.<br /><em>One honest session.</em></h3><p>Use the full practice system when you want the paper trace, debugging drill, AI prompt, and completion standard for a stage.</p><a class="button button-dark" href="/dsa-for-data-science/practice/">Open practice guide <span>↗</span></a></div>
+    <div class="practice-card"><span class="resource-type">PRACTICE COMPANION</span><h3>One chunk.<br /><em>One honest session.</em></h3><p>Use the full practice system when you want the paper trace, debugging drill, AI prompt, and completion standard for a stage.</p><a class="button button-dark" href="/dsa-for-data-science/practice/">Open practice guide <Icon name="arrow" size={15} /></a></div>
   </div>
 </section>

@@ -1,0 +1,26 @@
+---
+import { site } from '../data/site';
+import { stageGroups, stages } from '../data/stages';
+import Icon from './Icon.astro';
+
+const { currentStage = '', currentTitle = '', sectionLinks = [] } = Astro.props as {
+  currentStage?: string;
+  currentTitle?: string;
+  sectionLinks?: { href: string; title: string; major?: boolean }[];
+};
+const stageById = new Map(stages.map((stage) => [stage.id, stage]));
+---
+<aside class="sequence-sidebar" data-sequence-sidebar>
+  <details class="sequence-mobile-details">
+    <summary><span><Icon name="book" size={16} /> Complete sequence</span><Icon name="arrow" size={14} /></summary>
+    <div class="sequence-mobile-menu">
+      {stageGroups.map((group) => <div class="sequence-group"><span class="sequence-group-label">{group.title}</span>{group.stageIds.map((id) => { const stage = stageById.get(id); return stage && <a class:list={['sequence-stage', currentStage === stage.id && 'is-active']} aria-current={currentStage === stage.id ? 'page' : undefined} href={`${site.basePath}/stage/${stage.slug}/`}><span>{stage.id}</span><strong>{stage.title}</strong></a>; })}</div>)}
+    </div>
+  </details>
+  <nav class="sequence-nav" aria-label="Complete learning sequence" id="stage-contents">
+    <div class="sidebar-title"><Icon name="book" size={17} /><strong>Complete sequence</strong></div>
+    <p class="sequence-subtitle">Choose a stage</p>
+    {stageGroups.map((group) => <div class="sequence-group"><span class="sequence-group-label">{group.title}</span>{group.stageIds.map((id) => { const stage = stageById.get(id); return stage && <a class:list={['sequence-stage', currentStage === stage.id && 'is-active']} aria-current={currentStage === stage.id ? 'page' : undefined} href={`${site.basePath}/stage/${stage.slug}/`}><span>{stage.id}</span><strong>{stage.title}</strong></a>; })}</div>)}
+    {currentStage && sectionLinks.length > 0 && <div class="sequence-sections"><span class="sequence-group-label">On this stage</span>{currentTitle && <a class="sequence-current-title" href="#stage-contents">{currentTitle}</a>}{sectionLinks.map((link) => <a class:list={['sequence-section-link', link.major && 'is-major']} href={link.href}>{link.title}</a>)}</div>}
+  </nav>
+</aside>

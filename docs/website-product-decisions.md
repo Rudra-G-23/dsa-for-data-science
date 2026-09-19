@@ -103,5 +103,5 @@ This document records product decisions for the GitHub Pages learning website. T
 - Exact contents and format of the progress export and restore file.
 - Exact share platforms and social-preview behavior.
 - How future reusable study skills should be defined, installed, and invoked.
-- Visual direction, font choice, and light/dark behavior.
+- Visual direction, font choice, and light-only behavior.
 - Final frontend stack and the exact GitHub Pages workflow configuration.

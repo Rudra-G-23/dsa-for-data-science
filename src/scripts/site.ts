@@ -99,15 +99,41 @@ const toast = (message: string) => {
 };
 
 const copyText = async (value: string) => {
-  if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(value);
-  else {
-    const textarea = document.createElement('textarea');
-    textarea.value = value;
-    document.body.append(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    textarea.remove();
+  try {
+    if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(value);
+    else {
+      const textarea = document.createElement('textarea');
+      textarea.value = value;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.append(textarea);
+      textarea.select();
+      const copied = document.execCommand('copy');
+      textarea.remove();
+      if (!copied) return false;
+    }
+    return true;
+  } catch {
+    return false;
   }
+};
+
+const showCopied = (button: HTMLButtonElement, message = 'Copied.') => {
+  const original = button.dataset.originalLabel || button.innerHTML || 'Copy prompt';
+  button.dataset.originalLabel = original;
+  button.textContent = 'Copied';
+  button.classList.add('is-copied');
+  toast(message);
+  window.setTimeout(() => {
+    button.innerHTML = original;
+    button.classList.remove('is-copied');
+  }, 2000);
+};
+
+const copyFromButton = async (button: HTMLButtonElement, value: string, message = 'Prompt copied.') => {
+  if (await copyText(value)) showCopied(button, message);
+  else toast('Copy failed - select and copy manually.');
 };
 
 const download = (content: string, name: string, type = 'text/plain') => {
@@ -152,23 +178,18 @@ document.querySelectorAll<HTMLButtonElement>('[data-level]').forEach((button) =>
   window.setTimeout(() => document.querySelector<HTMLDialogElement>('[data-setup-dialog]')?.close(), 1800);
 }));
 
-document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((button) => button.addEventListener('click', () => {
-  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.dataset.theme = theme;
-  localStorage.setItem('dsa-theme', theme);
-  button.setAttribute('aria-label', `Use ${theme === 'dark' ? 'light' : 'dark'} mode`);
-}));
-
 document.querySelectorAll<HTMLElement>('[data-page-tools]').forEach((tools) => {
   tools.querySelectorAll<HTMLButtonElement>('[data-ai]').forEach((button) => button.addEventListener('click', async () => {
     const context = getToolContext(tools);
     const prompt = sharedPrompt.replace('{page_url}', context.url);
-    await copyText(prompt);
+    if (button.dataset.ai === 'copy-prompt') { await copyFromButton(button, prompt); return; }
     const destinations: Record<string, string> = { chatgpt: `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`, claude: `https://claude.ai/new?q=${encodeURIComponent(prompt)}`, gemini: `https://gemini.google.com/app?q=${encodeURIComponent(prompt)}`, grok: `https://grok.com/?q=${encodeURIComponent(prompt)}` };
-    if (button.dataset.ai === 'copy-markdown') { await copyText(`## ${context.title}\n\n${prompt}`); toast('Markdown prompt copied.'); return; }
-    if (button.dataset.ai === 'copy-text') { toast('Plain-text prompt copied.'); return; }
+    if (button.dataset.ai === 'copy-markdown') { await copyFromButton(button, `## ${context.title}\n\n${prompt}`, 'Markdown prompt copied.'); return; }
+    if (button.dataset.ai === 'copy-text') { await copyFromButton(button, prompt, 'Plain-text prompt copied.'); return; }
+    const promptCopied = await copyText(prompt);
     window.open(destinations[button.dataset.ai || 'chatgpt'], '_blank', 'noopener,noreferrer');
-    toast('Prompt copied before opening the AI tool.');
+    if (promptCopied) toast('Prompt copied before opening the AI tool.');
+    else toast('Copy failed - select and copy manually.');
   }));
   tools.querySelectorAll<HTMLButtonElement>('[data-download]').forEach((button) => button.addEventListener('click', () => {
     if (button.dataset.download === 'print') { window.print(); return; }
@@ -194,6 +215,38 @@ document.querySelectorAll<HTMLElement>('[data-page-tools]').forEach((tools) => {
     };
     window.open(shareUrls[button.dataset.share || 'linkedin'], '_blank', 'noopener,noreferrer');
   }));
+});
+
+const closeToolMenus = () => document.querySelectorAll<HTMLDetailsElement>('.tool-details[open]').forEach((item) => { item.open = false; });
+document.addEventListener('click', (event) => {
+  const target = event.target as Node;
+  const pageTools = document.querySelector('.page-tools');
+  if (!pageTools?.contains(target)) closeToolMenus();
+  if ((event.target as HTMLElement).closest('.tool-menu button')) window.setTimeout(closeToolMenus, 0);
+});
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeToolMenus(); });
+window.addEventListener('scroll', closeToolMenus, { passive: true });
+document.querySelectorAll<HTMLDetailsElement>('.tool-details').forEach((details) => details.addEventListener('toggle', () => {
+  if (!details.open) return;
+  document.querySelectorAll<HTMLDetailsElement>('.tool-details').forEach((other) => { if (other !== details) other.open = false; });
+}));
+
+const preview = document.createElement('div');
+preview.className = 'link-preview';
+preview.hidden = true;
+document.body.append(preview);
+document.querySelectorAll<HTMLAnchorElement>('a[target="_blank"], a[data-stage-title]').forEach((link) => {
+  link.addEventListener('mouseenter', () => {
+    const title = link.dataset.previewTitle || link.textContent?.replace(/[↗]/g, '').trim() || 'External resource';
+    const domain = (() => { try { return new URL(link.href).hostname; } catch { return ''; } })();
+    const description = link.dataset.previewDescription || link.dataset.stageDescription || (link.target === '_blank' ? 'Opens in a new tab.' : 'Open this stage.');
+    preview.innerHTML = `<strong>${title}</strong><small>${description} ${domain}</small>`;
+    preview.hidden = false;
+    const rect = link.getBoundingClientRect();
+    preview.style.left = `${Math.min(rect.left, window.innerWidth - 300)}px`;
+    preview.style.top = `${Math.min(rect.bottom + 10, window.innerHeight - 90)}px`;
+  });
+  link.addEventListener('mouseleave', () => { preview.hidden = true; });
 });
 
 document.querySelector('[data-export]')?.addEventListener('click', () => {
@@ -230,8 +283,35 @@ document.querySelector('[data-reset]')?.addEventListener('click', () => {
   updateCurrentCard();
   toast('Progress reset.');
 });
-document.querySelector('[data-copy-shared]')?.addEventListener('click', async () => { await copyText(sharedPrompt.replace('{page_url}', currentUrl())); toast('Shared prompt copied.'); });
-document.querySelectorAll<HTMLButtonElement>('[data-copy-prompt]').forEach((button) => button.addEventListener('click', async () => { await copyText(button.dataset.copyPrompt || ''); toast('Prompt copied.'); }));
+document.querySelector<HTMLButtonElement>('[data-copy-shared]')?.addEventListener('click', async (event) => { await copyFromButton(event.currentTarget as HTMLButtonElement, sharedPrompt.replace('{page_url}', currentUrl()), 'Shared prompt copied.'); });
+document.querySelectorAll<HTMLButtonElement>('[data-copy-prompt]').forEach((button) => button.addEventListener('click', async () => { await copyFromButton(button, button.dataset.copyPrompt || ''); }));
+
+const copyPromptSection = (heading: HTMLHeadingElement) => {
+  const depth = Number(heading.dataset.copyDepth || heading.tagName.slice(1));
+  const parts = [heading.querySelector('.heading-title')?.textContent?.trim() || heading.textContent?.trim() || ''];
+  let sibling = heading.nextElementSibling;
+  while (sibling) {
+    if (/^H[1-6]$/.test(sibling.tagName) && Number(sibling.tagName.slice(1)) <= depth) break;
+    parts.push(sibling.textContent?.trim() || '');
+    sibling = sibling.nextElementSibling;
+  }
+  return parts.filter(Boolean).join('\n\n');
+};
+document.querySelectorAll<HTMLButtonElement>('[data-copy-heading]').forEach((button) => button.addEventListener('click', async () => {
+  const heading = button.closest('h1, h2, h3, h4, h5, h6');
+  if (heading) await copyFromButton(button, copyPromptSection(heading));
+}));
+
+const headingTargets = Array.from(document.querySelectorAll<HTMLElement>('.source-content h2[id], .source-content h3[id]'));
+const headingLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.document-toc a, .sequence-sections a[href^="#"]'));
+if (headingTargets.length && headingLinks.length && 'IntersectionObserver' in window) {
+  const headingObserver = new IntersectionObserver((entries) => {
+    const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+    if (!visible) return;
+    headingLinks.forEach((link) => link.classList.toggle('is-active', link.hash === `#${(visible.target as HTMLElement).id}`));
+  }, { rootMargin: '-110px 0px -65% 0px', threshold: 0 });
+  headingTargets.forEach((heading) => headingObserver.observe(heading));
+}
 
 renderProgress();
 updateCurrentCard();

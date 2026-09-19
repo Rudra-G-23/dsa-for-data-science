@@ -1,6 +1,8 @@
 # DSA Practice System in Python
 ## Dependency-Safe, Free, Beginner-Friendly Practice Companion
 
+**Last updated:** 2026-09-18
+
 **Companion to:** `DSA_for_Data_Science_ML_Master_Roadmap.md`  
 **Primary language:** Python 3  
 **Goal:** Learn -> think -> trace -> implement -> apply -> explain -> retain.  
@@ -6211,4 +6213,3 @@ I can still do these things after a few days without rereading everything.
 ```
 
 That is the practice system this document is designed to support.
-
