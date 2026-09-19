@@ -1,8 +1,13 @@
 ---
 import { site, sharedPrompt } from '../data/site';
+import Icon from '../components/Icon.astro';
+import DocsSidebar from '../components/DocsSidebar.astro';
+import { docsSearchItems } from '../data/search';
 import '../styles/global.css';
 const { title = site.title, description = site.description, image = '/social/og-reference.svg' } = Astro.props;
-const canonical = new URL(`${site.basePath}${Astro.url.pathname}`.replace(/\/+/g, '/'), 'https://rudra-g-23.github.io').toString();
+const currentPath = Astro.url.pathname.replace(site.basePath, '') || '/';
+const docsMode = currentPath !== '/';
+const canonical = new URL(Astro.url.pathname, 'https://rudra-g-23.github.io').toString();
 ---
 <!doctype html>
 <html lang="en">
@@ -10,7 +15,7 @@ const canonical = new URL(`${site.basePath}${Astro.url.pathname}`.replace(/\/+/g
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f4f1eb" />
+    <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.title} />
@@ -24,31 +29,27 @@ const canonical = new URL(`${site.basePath}${Astro.url.pathname}`.replace(/\/+/g
     <meta name="twitter:image" content={`https://rudra-g-23.github.io${site.basePath}${image}`} />
     <link rel="icon" href={`${site.basePath}/favicon.svg`} />
     <title>{title}</title>
-    <script is:inline>
-      const storedTheme = localStorage.getItem('dsa-theme');
-      if (storedTheme) document.documentElement.dataset.theme = storedTheme;
-    </script>
     <slot name="head" />
   </head>
-  <body data-shared-prompt={sharedPrompt}>
-    <div class="site-shell">
-      <header class="topbar">
-        <a class="brand" href={`${site.basePath}/`} aria-label="DSA for Data Science home"><span class="brand-mark">{ }</span><span>{site.name}</span></a>
+  <body data-shared-prompt={sharedPrompt} data-docs-search-index={JSON.stringify(docsSearchItems)}>
+    <div class:list={['site-shell', docsMode && 'is-docs-shell']}>
+      {docsMode ? <header class="docs-header"><button class="docs-menu-button" type="button" aria-label="Open navigation" aria-expanded="false" data-docs-menu><Icon name="menu" size={19} /></button><a class="brand" href={`${site.basePath}/`} aria-label="DSA for Data Science home"><span class="brand-mark"><Icon name="nodes" size={20} /></span><span>{site.name}</span></a><div class="docs-search"><Icon name="search" size={16} /><input type="search" placeholder="Search the learning library" aria-label="Search the learning library" autocomplete="off" data-docs-search /><kbd>⌘ K</kbd><div class="docs-search-results" data-docs-search-results hidden></div></div><div class="docs-header-actions"><a class="github-link" href={site.repository} target="_blank" rel="noreferrer">GitHub <Icon name="external" size={15} /></a><details class="theme-details"><summary aria-label="Choose theme">Theme</summary><div><button type="button" data-theme="system">System</button><button type="button" data-theme="light">Light</button><button type="button" data-theme="dark">Dark</button></div></details></div></header> : <header class="topbar">
+        <a class="brand" href={`${site.basePath}/`} aria-label="DSA for Data Science home"><span class="brand-mark"><Icon name="nodes" size={20} /></span><span>{site.name}</span></a>
         <nav class="nav-links" aria-label="Primary navigation">
           <a href={`${site.basePath}/#roadmap`}>Roadmap</a>
           <a href={`${site.basePath}/practice/`}>Practice</a>
           <a href={`${site.basePath}/resources/`}>Resources</a>
+          <a href={`${site.basePath}/skills/`}>Skills</a>
         </nav>
         <div class="header-actions">
-          <button class="icon-button" data-theme-toggle aria-label="Use dark mode" title="Toggle dark mode">◐</button>
-          <a class="github-link" href={site.repository} target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+          <a class="github-link" href={site.repository} target="_blank" rel="noreferrer">GitHub <Icon name="external" size={15} /></a>
         </div>
-      </header>
-      <main id="main-content"><slot /></main>
+      </header>}
+      {docsMode ? <div class="docs-layout"><DocsSidebar currentPath={currentPath} /><aside class="docs-toc" id="document-contents" aria-label="On this page"><details class="docs-mobile-toc" open><summary>On this page</summary><nav data-docs-toc></nav></details><nav class="docs-desktop-toc" data-docs-toc></nav></aside><main id="main-content" class="docs-main"><slot /></main></div> : <main id="main-content"><slot /></main>}
       <footer class="footer">
-        <a class="brand" href={`${site.basePath}/`}><span class="brand-mark">{ }</span><span>{site.name}</span></a>
-        <span>Open source. No backend. Your progress stays local.</span>
-        <a href={site.repository} target="_blank" rel="noreferrer">Source repository ↗</a>
+        <a class="brand" href={`${site.basePath}/`}><span class="brand-mark"><Icon name="nodes" size={20} /></span><span>{site.name}</span></a>
+        <span>Progress is saved in this browser.</span>
+        <a href={site.repository} target="_blank" rel="noreferrer">Source repository <Icon name="external" size={14} /></a>
       </footer>
     </div>
     <script src="../scripts/site.ts"></script>

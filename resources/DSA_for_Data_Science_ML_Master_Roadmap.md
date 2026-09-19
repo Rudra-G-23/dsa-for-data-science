@@ -1,5 +1,7 @@
 # DSA for Data Science & ML — Beginner-to-Advanced Master Roadmap in Python
 
+**Last updated:** 2026-09-18
+
 **Built from:** the uploaded *DSA for AI* PDF, the CampusX `dsa-for-ai` repository/course structure, and a comparison against established algorithm/data-structure curricula and official Python/NumPy/SciPy documentation.
 
 **Research date:** 2026-09-18  

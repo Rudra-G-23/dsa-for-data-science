@@ -11,6 +11,12 @@ export type Stage = {
   accent: 'coral' | 'blue' | 'yellow' | 'paper';
 };
 
+export type StageGroup = {
+  id: string;
+  title: string;
+  stageIds: string[];
+};
+
 const stage = (
   id: string,
   title: string,
@@ -41,7 +47,14 @@ export const stages: Stage[] = [
   stage('15', 'Greedy algorithms', 'Local choices, exchange arguments, intervals, and scheduling.', 'Know when the next best choice is safe.', { label: 'Greedy algorithms', href: 'https://cp-algorithms.com/greedy/index.html' }, { label: 'Interval practice', href: 'https://leetcode.com/tag/greedy/' }, 'Construct a counterexample to a tempting greedy rule before trusting a local choice.', 'paper'),
   stage('16', 'Dynamic programming', 'Recurrence, memoization, tabulation, and state design.', 'Turn repeated work into a table of decisions.', { label: 'DP study plan', href: 'https://leetcode.com/studyplan/dynamic-programming/' }, { label: 'DP patterns', href: 'https://cp-algorithms.com/dynamic_programming/intro-to-dp.html' }, 'Write the state, transition, base case, and evaluation order before writing code.', 'coral'),
   stage('17', 'Tries and string algorithms', 'Prefix trees, KMP, rolling hash, and advanced search.', 'Index language when ordinary lookup is not enough.', { label: 'String algorithms', href: 'https://cp-algorithms.com/string/main_lorentz.html' }, { label: 'Trie visualizer', href: 'https://visualgo.net/en/trie' }, 'Build a tiny trie from five words and mark the shared prefixes that save repeated comparisons.', 'blue'),
-  stage('18', 'Data science extensions', 'Sparse structures, streaming, top-K, graph ML, and nearest neighbors.', 'Connect DSA mechanics to real data workloads.', { label: 'NumPy user guide', href: 'https://numpy.org/doc/stable/user/index.html' }, { label: 'SciPy sparse guide', href: 'https://docs.scipy.org/doc/scipy/tutorial/sparse.html' }, 'Pick one data workload and name its data structure, operation, scale constraint, and likely failure mode.', 'yellow'),
+  stage('18', 'Data science extensions', 'Sparse structures, streaming, top-K, graph ML, and nearest neighbors.', 'Connect DSA mechanics to real data workloads.', { label: 'NumPy user guide', href: 'https://numpy.org/doc/stable/user/index.html' }, { label: 'SciPy sparse guide', href: 'https://docs.scipy.org/doc/scipy/tutorial/sparse.html' }, 'Connect sparse, streaming, ranking, and graph ideas to practical data work.', 'yellow'),
+];
+
+export const stageGroups: StageGroup[] = [
+  { id: 'foundations', title: 'Foundations', stageIds: ['00', '01', '02', '03', '04'] },
+  { id: 'core-structures', title: 'Core structures', stageIds: ['05', '06', '07', '08', '09', '10', '11', '12', '13'] },
+  { id: 'algorithms', title: 'Algorithms', stageIds: ['14', '15', '16', '17'] },
+  { id: 'data-science-extensions', title: 'Data science extensions', stageIds: ['18'] },
 ];
 
 export const getStage = (slug: string) => stages.find((item) => item.slug === slug);

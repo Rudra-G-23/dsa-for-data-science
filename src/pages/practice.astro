@@ -3,11 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import AskTools from '../components/AskTools.astro';
 import SectionLabel from '../components/SectionLabel.astro';
 import { renderMarkdown } from '../lib/renderMarkdown';
-import practiceSource from '../../docs/DSA_Practice_System_Free_Resources_Dependency_Safe.md?raw';
+import { practiceHtmlSource, practiceHeadings } from '../data/content';
 import { site } from '../data/site';
-const html = renderMarkdown(practiceSource);
+const html = renderMarkdown(practiceHtmlSource, '', 'document-contents');
 ---
 <BaseLayout title={`Practice companion - ${site.title}`} description="Dependency-safe practice, prompts, progress templates, and free resources for the DSA roadmap." image="/social/og-reference.svg">
-  <section class="reference-hero"><a class="back-link" href={`${site.basePath}/`}>← Back home</a><SectionLabel>Practice companion</SectionLabel><h1>Make the ideas<br /><em>survive contact.</em></h1><p>The source practice system turns each stage into a sequence of understanding, paper traces, implementation, debugging, application, and reflection.</p><AskTools stageTitle="DSA practice companion" /></section>
-  <article class="source-content"><div class="source-content-head"><SectionLabel>Original document</SectionLabel><p>Rendered from <a href={`${site.repository}/blob/main/docs/DSA_Practice_System_Free_Resources_Dependency_Safe.md`} target="_blank" rel="noreferrer">docs/DSA_Practice_System_Free_Resources_Dependency_Safe.md ↗</a></p></div><Fragment set:html={html} /></article>
+  <section class="reference-hero"><a class="back-link" href={`${site.basePath}/`}>← Back home</a><SectionLabel>Practice companion</SectionLabel><h1>Make the ideas<br /><em>survive contact.</em></h1><p>The source practice system turns each stage into dependency-safe exercises, debugging drills, prompts, and review.</p><p class="updated-line">Last updated: 2026-09-18</p><AskTools stageTitle="DSA practice companion" /></section>
+  <article class="source-content"><div class="source-content-head"><SectionLabel>Original document</SectionLabel><p>Last updated: 2026-09-18</p><p>Rendered from <a href={`${site.repository}/blob/main/resources/DSA_Practice_System_Free_Resources_Dependency_Safe.md`} target="_blank" rel="noreferrer">resources/DSA_Practice_System_Free_Resources_Dependency_Safe.md ↗</a></p></div><nav class="document-toc" id="document-contents" aria-label="Practice table of contents"><strong>On this page</strong>{practiceHeadings.filter((item) => item.depth <= 2).map((item) => <a class:list={[item.depth === 1 && 'toc-major']} href={`#${item.slug}`}>{item.title}</a>)}</nav><Fragment set:html={html} /></article>
 </BaseLayout>

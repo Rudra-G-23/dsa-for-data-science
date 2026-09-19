@@ -16,6 +16,8 @@ Progress is stored in the browser only. The site can export a human-readable `ds
 
 The deployed site is configured for `/dsa-for-data-science` on GitHub Pages. The workflow in `.github/workflows/pages.yml` builds `dist` and deploys it on pushes to `main` or manual dispatch.
 
+Website: https://rudra-g-23.github.io/dsa-for-data-science
+
 ## Reusable study skills
 
 The [`skills/`](skills/) directory contains provider-neutral Markdown instruction packages:
@@ -28,6 +30,6 @@ Each package has a versioned `SKILL.md` with its purpose, prerequisites, and res
 
 ## Source documents
 
-- [Master roadmap](docs/DSA_for_Data_Science_ML_Master_Roadmap.md)
-- [Practice companion](docs/DSA_Practice_System_Free_Resources_Dependency_Safe.md)
+- [Master roadmap](resources/DSA_for_Data_Science_ML_Master_Roadmap.md)
+- [Practice companion](resources/DSA_Practice_System_Free_Resources_Dependency_Safe.md)
 - [Resource curation notes](docs/resources-meta-data.md)
